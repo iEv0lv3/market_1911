@@ -40,12 +40,29 @@ class Market
   end
 
   def sell(item, amount)
-    availability_to_sell(item, amount)
+    if availability_to_sell(item, amount) == true
+      remove_from_stock(item, amount)
+      true
+    else
+      false
+    end
   end
 
   def availability_to_sell(item, amount)
     available = total_inventory
     available[item] >= amount
+  end
+
+  def remove_from_stock(item, amount)
+    amount_remaining = amount
+    @vendors.find_all do |vendor|
+      next if vendor.inventory[item].zero?
+
+      until vendor.inventory[item].zero? || amount_remaining.zero?
+        vendor.inventory[item] -= 1
+        amount_remaining -= 1
+      end
+    end
   end
 end
 
