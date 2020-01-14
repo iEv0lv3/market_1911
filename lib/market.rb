@@ -11,15 +11,13 @@ class Market
   end
 
   def vendor_names
-    @vendors.map do |vendor|
-      vendor.name
-    end
+    @vendors.map(&:name)
   end
 
   def vendors_that_sell(item)
     @vendors.map do |vendor|
       vendor if vendor.inventory.include?(item)
-    end
+    end.compact
   end
 
   def sorted_item_list
@@ -27,7 +25,7 @@ class Market
       vendor.inventory.map do |item|
         item[0].name
       end
-    end.flatten.uniq
+    end.flatten.uniq.sort
   end
 
   def total_inventory
